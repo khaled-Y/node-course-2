@@ -1,9 +1,10 @@
 const expect = require("expect");
 const request = require("supertest");
+const{ObjectID} = require("mongodb");
 
 const {app} = require("./../server");
 const {Todo} = require("./../modles/todo");
-let todos = [{text:"do some"},{text:"do some2"}];
+let todos = [{_id:new ObjectID(), text:"do some"},{_id:new ObjectID(),text:"do some2"}];
 
 beforeEach((done=>{
     Todo.remove({}).then(()=>{
@@ -58,5 +59,30 @@ describe("GET /todos",()=>{
         expect(res.body.todos.length).toBe(2);               
     })
     .end((done));
+    })
+})
+
+describe("GET /todos/:id",()=>{
+    it("valid id",(done)=>{
+        request(app)
+        .get("/todos/"+todos[1]._id)
+        .expect(200)
+        .expect((res)=>{
+            expect(res.body.todo.text).toBe(todos[1].text);            
+        }).end(done);
+
+    })
+    it("it should return 404 if not valid",(done)=>{
+        request(app)
+        .get("/todos/"+new ObjectID())
+        .expect(404)        
+        .end(done);
+    })
+
+    it("it should return 404 for non id",(done)=>{
+        request(app)
+        .get("/todos/321546")
+        .expect(400)        
+        .end(done);
     })
 })
