@@ -8,6 +8,7 @@ const {col2} = require("./modles/user");
 
 let app = express();
 
+const port = process.env.port || 3000;
 app.use(bodyParser.json());
 
 
@@ -40,8 +41,8 @@ app.get("/todos/:id",(req,res)=>{
     }).catch((e)=>res.status(500).send());
 })
 
-app.listen(3000,()=>{
-    console.log("started 3000...");
+app.listen(port,()=>{
+    console.log(`started ${port}...`);
 })
 
 module.exports = {
