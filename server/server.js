@@ -19,7 +19,7 @@ app.post("/col2",(req,res)=>{
     col.save().then((doc)=>res.send(doc+req.body),(e)=>res.send(e));
 })
  app.post("/todos",(req,res)=>{
-     //console.log(req.body);
+     console.log(req.body);
      let todo = new Todo({
          text:req.body.text
      });
